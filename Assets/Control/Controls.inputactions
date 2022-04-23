@@ -1,5 +1,5 @@
 {
-    "name": "CameraControls",
+    "name": "Controls",
     "maps": [
         {
             "name": "CameraMovement",
@@ -187,6 +187,34 @@
                     "action": "Rotate",
                     "isComposite": false,
                     "isPartOfComposite": true
+                }
+            ]
+        },
+        {
+            "name": "GameInteractions",
+            "id": "aa99ff7c-d06c-4a13-9c2f-9521041089a9",
+            "actions": [
+                {
+                    "name": "Pointer",
+                    "type": "Value",
+                    "id": "6abe25e4-a71e-427b-b3ca-448db2fc4798",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "3e860fdc-fb27-477d-872b-d9dbb457edbf",
+                    "path": "<Pointer>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pointer",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

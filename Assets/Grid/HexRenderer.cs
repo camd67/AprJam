@@ -10,6 +10,77 @@ namespace Grid
     [RequireComponent(typeof(MeshRenderer))]
     public class HexRenderer : MonoBehaviour
     {
+        public static Vector2 CubeToAxial(Vector3 cube)
+        {
+            return new(cube.x, cube.y);
+        }
+
+        public static Vector2Int CubeToAxial(Vector3Int cube)
+        {
+            return new(cube.x, cube.y);
+        }
+
+        public static Vector3 AxialToCube(Vector2 axial)
+        {
+            return new Vector3(axial.x, axial.y, -axial.x - axial.y);
+        }
+
+        public static Vector3Int AxialToCube(Vector2Int axial)
+        {
+            return new(axial.x, axial.y, -axial.x - axial.y);
+        }
+
+        public static Vector2Int AxialToOffset(Vector2Int axial)
+        {
+            var col = axial.x;
+            var row = axial.y + (axial.x + (axial.x & 1)) / 2;
+            return new Vector2Int(col, row);
+        }
+
+        public static Vector2Int OffsetToAxial(Vector2Int offset)
+        {
+            return OffsetToAxial(offset.x, offset.y);
+        }
+
+        public static Vector2Int OffsetToAxial(int x, int y)
+        {
+            var q = x;
+            var r = y - (x + (x & 1)) / 2;
+            return new Vector2Int(q, r);
+        }
+
+        public static Vector3Int CubeRound(Vector3 cube)
+        {
+            var q = Mathf.Round(cube.x);
+            var r = Mathf.Round(cube.y);
+            var s = Mathf.Round(cube.z);
+
+            var qDiff = Mathf.Abs(q - cube.x);
+            var rDiff = Mathf.Abs(r - cube.y);
+            var sDiff = Mathf.Abs(s - cube.z);
+
+            // who has the largest diff? Figure it out and normalize that one
+            if (qDiff > rDiff && qDiff > sDiff)
+            {
+                q = -r - s;
+            }
+            else if (rDiff > sDiff)
+            {
+                r = -q - s;
+            }
+            else
+            {
+                s = -q - r;
+            }
+
+            return new Vector3Int((int)q, (int)r, (int)s);
+        }
+
+        public static Vector2Int AxialRound(Vector2 axial)
+        {
+            return CubeToAxial(CubeRound(AxialToCube(axial)));
+        }
+
         private Mesh mesh;
         private MeshFilter meshFilter;
         private MeshRenderer meshRenderer;
@@ -26,6 +97,15 @@ namespace Grid
 
         [SerializeField]
         public float hexHeight;
+
+        [SerializeField]
+        public Vector2Int axialCoord;
+
+        [SerializeField]
+        public Vector3Int cubeCoord;
+
+        [SerializeField]
+        public Vector2Int offsetCoord;
 
         private void Awake()
         {
@@ -57,6 +137,13 @@ namespace Grid
         {
             meshRenderer.material = mat;
             material = mat;
+        }
+
+        public void SetCoords(Vector2Int offset)
+        {
+            offsetCoord = offset;
+            axialCoord = OffsetToAxial(offset);
+            cubeCoord = new Vector3Int(axialCoord.x, axialCoord.y, -axialCoord.x - axialCoord.y);
         }
 
         public void DrawMesh()

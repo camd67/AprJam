@@ -1,5 +1,5 @@
-using System;
 using Cinemachine;
+using Control;
 using UnityEngine;
 
 namespace Camera
@@ -27,13 +27,13 @@ namespace Camera
         [SerializeField]
         private float rotateSpeed;
 
-        private CameraControls cameraControls;
+        private Controls cameraControls;
 
         private float targetZoom;
 
         private void Awake()
         {
-            cameraControls = new CameraControls();
+            cameraControls = new Controls();
             targetZoom = cam.m_Lens.FieldOfView;
         }
 
