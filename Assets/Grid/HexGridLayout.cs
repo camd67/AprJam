@@ -84,6 +84,15 @@ namespace Grid
 
         public void HighlightTile(Vector2Int highlightedCoord)
         {
+            if (highlightedCoord.x < 0 || highlightedCoord.x > gridSize.x || highlightedCoord.y < 0 || highlightedCoord.y > gridSize.y)
+            {
+                if (highlightedTile != null)
+                {
+                    highlightedTile.SetMaterial(material);
+                    highlightedTile = null;
+                }
+            }
+
             if (tileLookup.TryGetValue(highlightedCoord, out var tile))
             {
                 if (highlightedTile != tile)
