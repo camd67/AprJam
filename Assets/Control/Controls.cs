@@ -226,6 +226,15 @@ namespace Control
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Select"",
+                    ""type"": ""Button"",
+                    ""id"": ""c1947fea-cf3c-4e12-b931-75da5933dd70"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -237,6 +246,17 @@ namespace Control
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Pointer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5325aea4-cfa3-40d4-89fd-df545127ea6b"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -253,6 +273,7 @@ namespace Control
             // GameInteractions
             m_GameInteractions = asset.FindActionMap("GameInteractions", throwIfNotFound: true);
             m_GameInteractions_Pointer = m_GameInteractions.FindAction("Pointer", throwIfNotFound: true);
+            m_GameInteractions_Select = m_GameInteractions.FindAction("Select", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -362,11 +383,13 @@ namespace Control
         private readonly InputActionMap m_GameInteractions;
         private IGameInteractionsActions m_GameInteractionsActionsCallbackInterface;
         private readonly InputAction m_GameInteractions_Pointer;
+        private readonly InputAction m_GameInteractions_Select;
         public struct GameInteractionsActions
         {
             private @Controls m_Wrapper;
             public GameInteractionsActions(@Controls wrapper) { m_Wrapper = wrapper; }
             public InputAction @Pointer => m_Wrapper.m_GameInteractions_Pointer;
+            public InputAction @Select => m_Wrapper.m_GameInteractions_Select;
             public InputActionMap Get() { return m_Wrapper.m_GameInteractions; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -379,6 +402,9 @@ namespace Control
                     @Pointer.started -= m_Wrapper.m_GameInteractionsActionsCallbackInterface.OnPointer;
                     @Pointer.performed -= m_Wrapper.m_GameInteractionsActionsCallbackInterface.OnPointer;
                     @Pointer.canceled -= m_Wrapper.m_GameInteractionsActionsCallbackInterface.OnPointer;
+                    @Select.started -= m_Wrapper.m_GameInteractionsActionsCallbackInterface.OnSelect;
+                    @Select.performed -= m_Wrapper.m_GameInteractionsActionsCallbackInterface.OnSelect;
+                    @Select.canceled -= m_Wrapper.m_GameInteractionsActionsCallbackInterface.OnSelect;
                 }
                 m_Wrapper.m_GameInteractionsActionsCallbackInterface = instance;
                 if (instance != null)
@@ -386,6 +412,9 @@ namespace Control
                     @Pointer.started += instance.OnPointer;
                     @Pointer.performed += instance.OnPointer;
                     @Pointer.canceled += instance.OnPointer;
+                    @Select.started += instance.OnSelect;
+                    @Select.performed += instance.OnSelect;
+                    @Select.canceled += instance.OnSelect;
                 }
             }
         }
@@ -399,6 +428,7 @@ namespace Control
         public interface IGameInteractionsActions
         {
             void OnPointer(InputAction.CallbackContext context);
+            void OnSelect(InputAction.CallbackContext context);
         }
     }
 }

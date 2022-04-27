@@ -31,7 +31,7 @@ namespace Grid
         /// <summary>
         /// The currently highlighted tile. Usually null and gets changed a lot
         /// </summary>
-        private HexRenderer highlightedTile;
+        public HexRenderer highlightedTile;
 
         void OnEnable()
         {
@@ -40,6 +40,8 @@ namespace Grid
 
         private void LayoutGrid()
         {
+            var gridHolder = new GameObject("Grid Holder");
+            gridHolder.transform.SetParent(transform);
             tileLookup = new Dictionary<Vector2Int, HexRenderer>();
             for (var y = 0; y < gridSize.y; y++)
             {
@@ -63,7 +65,7 @@ namespace Grid
                     hexRenderer.SetMaterial(material);
                     hexRenderer.DrawMesh();
 
-                    tile.transform.SetParent(transform, true);
+                    tile.transform.SetParent(gridHolder.transform, true);
                 }
             }
         }
