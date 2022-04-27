@@ -37,6 +37,9 @@ namespace Grid
         [SerializeField]
         private float maxPlayerSpeed;
 
+        [SerializeField]
+        private int maxPlayerMoveDistance;
+
         private Vector3 playerVelocity;
 
         private void Awake()
@@ -61,6 +64,7 @@ namespace Grid
             player = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity, transform);
             playerTilePos = Vector2Int.zero;
             player.transform.position = gridLayout.OffsetToWorld(playerTilePos);
+            gridLayout.HighlightTilesInRange(playerTilePos, maxPlayerMoveDistance);
         }
 
         private void OnEnable()
@@ -103,13 +107,17 @@ namespace Grid
             }
 
             // Move
-            if (controls.GameInteractions.Select.WasPerformedThisFrame() && gridLayout.highlightedTile != null)
+            if (controls.GameInteractions.Select.WasPerformedThisFrame()
+                && gridLayout.highlightedTile != null
+                && gridLayout.rangeTiles.Contains(gridLayout.highlightedTile))
             {
                 playerTilePos = gridLayout.highlightedTile.offsetCoord;
+                gridLayout.HighlightTilesInRange(playerTilePos, maxPlayerMoveDistance);
             }
             var targetWorldPos = gridLayout.OffsetToWorld(playerTilePos);
             var position = player.transform.position;
             player.transform.position = Vector3.SmoothDamp(position, targetWorldPos, ref playerVelocity, playerSpeed, maxPlayerSpeed);
+
             var lookAt = Quaternion.LookRotation(targetWorldPos - position);
             player.transform.rotation = Quaternion.Slerp(player.transform.rotation, lookAt, Time.deltaTime * playerTurnSpeed);
         }

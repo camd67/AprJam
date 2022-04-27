@@ -1218,7 +1218,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 784615999}
-  m_LocalRotation: {x: 0.58634216, y: -0.000000013938263, z: 0.000000010088826, w: 0.81006354}
+  m_LocalRotation: {x: 0.58634216, y: 0.000000013938259, z: -0.000000010088823, w: 0.81006354}
   m_LocalPosition: {x: 0, y: 97, z: -31.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1682,7 +1682,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 917937932}
-  m_LocalRotation: {x: 0.58634216, y: -0.000000013938263, z: 0.000000010088826, w: 0.81006354}
+  m_LocalRotation: {x: 0.58634216, y: 0.000000013938259, z: -0.000000010088823, w: 0.81006354}
   m_LocalPosition: {x: 0, y: 97, z: -31.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3608,6 +3608,7 @@ MonoBehaviour:
   hexHeight: 2
   material: {fileID: 2100000, guid: b5d01732893037e40a4ce96a8d548967, type: 2}
   highlightMat: {fileID: 2100000, guid: 99a8a6234d6a29a4ea9251e46d1244f7, type: 2}
+  rangeMat: {fileID: 2100000, guid: fa1e92c600759b247b060c5fb3f98260, type: 2}
   highlightedTile: {fileID: 0}
 --- !u!114 &2141722661
 MonoBehaviour:
@@ -3630,6 +3631,7 @@ MonoBehaviour:
   playerSpeed: 1
   playerTurnSpeed: 3
   maxPlayerSpeed: 75
+  maxPlayerMoveDistance: 3
 --- !u!1001 &442669924781484825
 PrefabInstance:
   m_ObjectHideFlags: 0

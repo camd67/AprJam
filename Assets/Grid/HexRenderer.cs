@@ -30,11 +30,15 @@ namespace Grid
             return new(axial.x, axial.y, -axial.x - axial.y);
         }
 
+        public static Vector2Int AxialToOffset(int q, int r)
+        {
+            var row = r + (q + (q & 1)) / 2;
+            return new Vector2Int(q, row);
+        }
+
         public static Vector2Int AxialToOffset(Vector2Int axial)
         {
-            var col = axial.x;
-            var row = axial.y + (axial.x + (axial.x & 1)) / 2;
-            return new Vector2Int(col, row);
+            return AxialToOffset(axial.x, axial.y);
         }
 
         public static Vector2Int OffsetToAxial(Vector2Int offset)
@@ -44,9 +48,8 @@ namespace Grid
 
         public static Vector2Int OffsetToAxial(int x, int y)
         {
-            var q = x;
             var r = y - (x + (x & 1)) / 2;
-            return new Vector2Int(q, r);
+            return new Vector2Int(x, r);
         }
 
         public static Vector3Int CubeRound(Vector3 cube)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,6 +24,9 @@ namespace Grid
         [SerializeField]
         private Material highlightMat;
 
+        [SerializeField]
+        private Material rangeMat;
+
         /// <summary>
         /// Tile lookup, stored in axial coords
         /// </summary>
@@ -32,6 +36,8 @@ namespace Grid
         /// The currently highlighted tile. Usually null and gets changed a lot
         /// </summary>
         public HexRenderer highlightedTile;
+
+        public readonly HashSet<HexRenderer> rangeTiles = new();
 
         void OnEnable()
         {
@@ -90,7 +96,14 @@ namespace Grid
             {
                 if (highlightedTile != null)
                 {
-                    highlightedTile.SetMaterial(material);
+                    if (rangeTiles.Contains(highlightedTile))
+                    {
+                        highlightedTile.SetMaterial(rangeMat);
+                    }
+                    else
+                    {
+                        highlightedTile.SetMaterial(material);
+                    }
                     highlightedTile = null;
                 }
             }
@@ -102,11 +115,48 @@ namespace Grid
                     // reset old tile no matter what
                     if (highlightedTile != null)
                     {
-                        highlightedTile.SetMaterial(material);
+                        if (rangeTiles.Contains(highlightedTile))
+                        {
+                            highlightedTile.SetMaterial(rangeMat);
+                        }
+                        else
+                        {
+                            highlightedTile.SetMaterial(material);
+                        }
                     }
                     // set new tile and remember it
                     tile.SetMaterial(highlightMat);
                     highlightedTile = tile;
+                }
+            }
+        }
+
+        public void HighlightTilesInRange(Vector2Int center, int distance)
+        {
+            // clear out old tiles
+            foreach (var tile in rangeTiles)
+            {
+                tile.SetMaterial(material);
+            }
+            rangeTiles.Clear();
+
+            // highlight new tiles
+            var axialCenter = HexRenderer.OffsetToAxial(center);
+            var q = axialCenter.x;
+            var r = axialCenter.y;
+            // Run our loop as if we were at (0,0) and then add our q,r offsets right before conversion to offset
+            for (var i = -distance; i <= distance; i++)
+            {
+                var bottomBound = Math.Max(-distance, -i - distance);
+                var upperBound = Math.Min(distance, -i + distance);
+                for (var j = bottomBound; j <= upperBound; j++)
+                {
+                    var offset = HexRenderer.AxialToOffset(q + i, r + j);
+                    if (tileLookup.TryGetValue(offset, out var tile))
+                    {
+                        rangeTiles.Add(tile);
+                        tile.SetMaterial(rangeMat);
+                    }
                 }
             }
         }
