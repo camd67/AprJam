@@ -84,6 +84,16 @@ namespace Grid
             return CubeToAxial(CubeRound(AxialToCube(axial)));
         }
 
+        public static int AxialDistance(Vector2Int a, Vector2Int b)
+        {
+            return (Math.Abs(a.x - b.x) + Math.Abs(a.x + a.y - b.x - b.y) + Math.Abs(a.y - b.y)) / 2;
+        }
+
+        public static int OffsetDistance(Vector2Int a, Vector2Int b)
+        {
+            return AxialDistance(OffsetToAxial(a), OffsetToAxial(b));
+        }
+
         private Mesh mesh;
         private MeshFilter meshFilter;
         private MeshRenderer meshRenderer;

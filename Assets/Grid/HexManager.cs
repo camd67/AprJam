@@ -1,3 +1,4 @@
+using System;
 using Control;
 using UnityEngine;
 
@@ -42,6 +43,8 @@ namespace Grid
 
         private Vector3 playerVelocity;
 
+        private PlayerTurn playerTurn;
+
         private void Awake()
         {
             cam = UnityEngine.Camera.main;
@@ -52,6 +55,7 @@ namespace Grid
                 tilePlane.Flip();
             }
             ResetBoard();
+            playerTurn = GetComponent<PlayerTurn>();
         }
 
         private void ResetBoard()
@@ -111,8 +115,10 @@ namespace Grid
                 && gridLayout.highlightedTile != null
                 && gridLayout.rangeTiles.Contains(gridLayout.highlightedTile))
             {
+                var distanceTravelled = HexRenderer.OffsetDistance(playerTilePos, gridLayout.highlightedTile.offsetCoord);
+                playerTurn.Fuel -= distanceTravelled;
                 playerTilePos = gridLayout.highlightedTile.offsetCoord;
-                gridLayout.HighlightTilesInRange(playerTilePos, maxPlayerMoveDistance);
+                gridLayout.HighlightTilesInRange(playerTilePos, Math.Min(playerTurn.Fuel, maxPlayerMoveDistance));
             }
             var targetWorldPos = gridLayout.OffsetToWorld(playerTilePos);
             var position = player.transform.position;
